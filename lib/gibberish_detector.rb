@@ -9,13 +9,12 @@ class GibberishDetector
   DATA_FILE = File.join(File.dirname(__FILE__), '..', '.trained_data.yml')
 
   class << self
-    def gibberish?(text, opts = {})
+    def gibberish?(text, trained_library, opts = {})
       opts[:lib_path] ||= DATA_FILE
       opts[:raw] ||= false
 
       raise GibberishDetectorException, "Please run Gibberish.train! to build your trained data file." unless File.exist?(opts[:lib_path])
 
-      trained_library = YAML.load(File.open(opts[:lib_path]))
       raise GibberishDetectorException, 'Please run Gibberish.train! to build your trained data file.' if trained_library.nil?
 
       value = _averageTransitionProbability(text, trained_library[:matrix])
